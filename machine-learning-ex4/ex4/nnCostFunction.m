@@ -93,6 +93,10 @@ for t = 1:m
     Delta2 = Delta2 + delta3(t, :)' * a2(t, :);
 end
 
+% Add regularization term
+Delta1 = Delta1 + lambda * [zeros(hidden_layer_size, 1) Theta1(:, 2:end)];
+Delta2 = Delta2 + lambda * [zeros(num_labels, 1) Theta2(:, 2:end)];
+
 Theta1_grad = Delta1 / m;
 Theta2_grad = Delta2 / m;
 
