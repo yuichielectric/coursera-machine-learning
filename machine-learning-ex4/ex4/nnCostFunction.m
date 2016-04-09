@@ -62,10 +62,13 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
-a1 = [ones(m, 1) X];
-a2 = [ones(m, 1) sigmoid(a1 * Theta1')];
-a3 = sigmoid(a2 * Theta2');
+a1 = [ones(m, 1) X];           % 5000 401
+z2 = a1 * Theta1';             % 5000 25
+a2 = [ones(m, 1) sigmoid(z2)]; % 5000 26
+z3 = a2 * Theta2';             % 5000 10
+a3 = sigmoid(z3);              % 5000 10
 
+% TODO vectorize
 yUnrolled = zeros(m, num_labels);
 for i = 1:m
     yUnrolled(i, y(i)) = 1;
@@ -78,10 +81,24 @@ J = sum(sum(-yUnrolled .* log(a3) - (1 - yUnrolled) .* log(1 - a3))) / m ...
 
 % -------------------------------------------------------------
 
+% Compute gradients.
+delta3 = a3 - yUnrolled; % 5000 10
+delta2 = delta3 * Theta2(:, 2:end) .* sigmoidGradient(z2); % 5000 25
+
+Delta1 = zeros(hidden_layer_size, input_layer_size + 1);
+Delta2 = zeros(num_labels, hidden_layer_size + 1);
+% TODO vectorize if possible
+for t = 1:m
+    Delta1 = Delta1 + delta2(t, :)' * a1(t, :);
+    Delta2 = Delta2 + delta3(t, :)' * a2(t, :);
+end
+
+Theta1_grad = Delta1 / m;
+Theta2_grad = Delta2 / m;
+
 % =========================================================================
 
 % Unroll gradients
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
-
 
 end
