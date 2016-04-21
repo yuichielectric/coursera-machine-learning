@@ -18,14 +18,14 @@ x = zeros(n, 1);
 %               a fixed dictionary (of 1899 words). The variable
 %               word_indices contains the list of indices of the words
 %               which occur in one email.
-% 
+%
 %               Concretely, if an email has the text:
 %
 %                  The quick brown fox jumped over the lazy dog.
 %
 %               Then, the word_indices vector for this text might look 
 %               like:
-%               
+%
 %                   60  100   33   44   10     53  60  58   5
 %
 %               where, we have mapped each word onto a number, for example:
@@ -48,14 +48,11 @@ x = zeros(n, 1);
 %
 %
 
-
-
-
-
-
-
+for i=1:length(word_indices)
+    x(word_indices(i)) = 1;
+end
 
 % =========================================================================
-    
+
 
 end
